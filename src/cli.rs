@@ -37,6 +37,8 @@ impl Cli {
     pub fn get_flags(&self) -> Vec<Flags> {
         let mut flags: Vec<Flags> = Vec::new();
 
+        // CHARS takes precedence over BYTES in wc
+        // so if CHARS is flagged, BYTES is ignored
         if self.bytes && !self.chars {
             flags.push(BYTES);
         }
