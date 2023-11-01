@@ -55,6 +55,7 @@ impl Counter {
             .windows(2)
             .filter(|&pair| pair[0].is_whitespace() && !pair[1].is_whitespace())
             .count()
+            // the iterator misses the first word in the text, so we add 1
             + 1;
 
         Ok(())
