@@ -1,11 +1,8 @@
 use std::io;
 
 use ccwc_rs::{
+    cli::{Cli, Flags},
     counter::Counter,
-    cli::{
-        Cli,
-        Flags,
-    },
 };
 
 use anyhow::Result;
@@ -24,11 +21,13 @@ fn main() -> Result<()> {
     } else {
         loop {
             match io::stdin().read_line(&mut counter.contents) {
-                Ok(len) => if len == 0 {
-                    break;
-                } else {
-                    continue;
-                },
+                Ok(len) => {
+                    if len == 0 {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
                 Err(e) => {
                     eprintln!("error: {}", e);
                     break;
@@ -48,15 +47,15 @@ fn main() -> Result<()> {
             Flags::LINES => {
                 counter.count_lines()?;
                 out.push(counter.lines());
-            },
+            }
             Flags::BYTES => {
                 counter.count_bytes()?;
                 out.push(counter.bytes());
-            },
+            }
             Flags::CHARS => {
                 counter.count_chars()?;
                 out.push(counter.chars());
-            },
+            }
             Flags::ALL => {
                 counter.count_bytes()?;
                 counter.count_lines()?;
@@ -76,4 +75,3 @@ fn main() -> Result<()> {
 
     Ok(())
 }
-

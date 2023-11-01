@@ -1,4 +1,4 @@
-use crate::cli::Flags::{BYTES, LINES, WORDS, CHARS, ALL};
+use crate::cli::Flags::{ALL, BYTES, CHARS, LINES, WORDS};
 use clap::Parser;
 
 #[derive(Debug, Parser)]
@@ -57,4 +57,3 @@ impl Cli {
         flags
     }
 }
-

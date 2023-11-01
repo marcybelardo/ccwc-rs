@@ -1,5 +1,5 @@
-use std::{fs::File, io::Read};
 use anyhow::Result;
+use std::{fs::File, io::Read};
 
 pub struct Counter {
     pub contents: String,
@@ -28,10 +28,7 @@ impl Counter {
     }
 
     pub fn count_bytes(&mut self) -> Result<()> {
-        self.bytes = self.contents
-            .as_bytes()
-            .iter()
-            .count();
+        self.bytes = self.contents.as_bytes().iter().count();
 
         Ok(())
     }
@@ -41,10 +38,7 @@ impl Counter {
     }
 
     pub fn count_lines(&mut self) -> Result<()> {
-        self.lines = self.contents
-            .chars()
-            .filter(|c| *c == '\n')
-            .count();
+        self.lines = self.contents.chars().filter(|c| *c == '\n').count();
 
         Ok(())
     }
@@ -54,12 +48,14 @@ impl Counter {
     }
 
     pub fn count_words(&mut self) -> Result<()> {
-        self.words = self.contents
+        self.words = self
+            .contents
             .chars()
             .collect::<Vec<char>>()
             .windows(2)
             .filter(|&pair| pair[0].is_whitespace() && !pair[1].is_whitespace())
-            .count() + 1;
+            .count()
+            + 1;
 
         Ok(())
     }
@@ -69,9 +65,7 @@ impl Counter {
     }
 
     pub fn count_chars(&mut self) -> Result<()> {
-        self.chars = self.contents
-            .chars()
-            .count();
+        self.chars = self.contents.chars().count();
 
         Ok(())
     }
