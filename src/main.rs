@@ -1,7 +1,7 @@
 use std::io;
 
 use ccwc_rs::{
-    cli::{Cli, Flags},
+    cli::Cli,
     counter::Counter,
 };
 
@@ -10,7 +10,7 @@ use clap::Parser;
 
 fn main() -> Result<()> {
     let args = Cli::parse();
-    let flags = args.get_flags();
+    let flags = &args.flags;
     let mut counter = Counter::new();
     let mut filename = String::new();
 
@@ -38,33 +38,10 @@ fn main() -> Result<()> {
 
     let mut out: Vec<usize> = Vec::new();
 
-    for flag in flags {
-        match flag {
-            Flags::WORDS => {
-                counter.count_words()?;
-                out.push(counter.words());
-            }
-            Flags::LINES => {
-                counter.count_lines()?;
-                out.push(counter.lines());
-            }
-            Flags::BYTES => {
-                counter.count_bytes()?;
-                out.push(counter.bytes());
-            }
-            Flags::CHARS => {
-                counter.count_chars()?;
-                out.push(counter.chars());
-            }
-            Flags::ALL => {
-                counter.count_bytes()?;
-                counter.count_lines()?;
-                counter.count_words()?;
-                out.push(counter.lines());
-                out.push(counter.words());
-                out.push(counter.bytes());
-            }
-        }
+    match (flags.bytes, flags.lines, flags.words, flags.chars) {
+        (true, false, false, false | true) => counter.bytes(),
+        (false, true, false, false) => counter.lines(),
+        (false, false, true, false) => counter.words(),
     }
 
     print!(" ");

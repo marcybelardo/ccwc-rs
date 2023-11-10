@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::{fs::File, io::Read};
+use std::{fs::File, io::{Read, BufRead}};
 
 pub struct Counter {
     pub contents: String,
@@ -25,6 +25,22 @@ impl Counter {
         file.read_to_string(&mut self.contents)?;
 
         Ok(())
+    }
+
+    pub fn load<R: BufRead>(&mut self, reader: &mut R) -> Result<()> {
+        loop {
+            match reader.read_line(&mut self.contents) {
+                Ok(bytes_read) => {
+                    self.bytes += bytes_read;
+                    self.lines += 1;
+                    Self::count_words(self)?;
+                    Self::count_chars(self)?;
+                },
+                Err(e) => return Err(e.into()),
+            }
+
+            self.contents.clear();
+        }
     }
 
     pub fn count_bytes(&mut self) -> Result<()> {
