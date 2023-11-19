@@ -16,18 +16,18 @@ pub struct Cli {
 pub struct Flag {
     /// Print the number of bytes in the file
     #[arg(short = 'c', long)]
-    bytes: bool,
+    pub bytes: bool,
 
     /// Print the number of lines in the file
     #[arg(short, long)]
-    lines: bool,
+    pub lines: bool,
 
     /// Print the number of words in the file
     #[arg(short, long)]
-    words: bool,
+    pub words: bool,
 
     /// Print the number of chars in the file
     #[arg(short = 'm', long)]
-    chars: bool,
+    pub chars: bool,
 }
 
