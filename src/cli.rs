@@ -22,4 +22,3 @@ pub struct Cli {
     /// The file to analyze
     pub file: Option<String>,
 }
-
