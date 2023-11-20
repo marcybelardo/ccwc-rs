@@ -1,19 +1,8 @@
-use clap::{Parser, Args};
+use clap::Parser;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
-    /// Flags for file parsing
-    #[command(flatten)]
-    pub flags: Flag,
-
-    /// The file to analyze
-    pub file: Option<String>,
-}
-
-#[derive(Args)]
-#[group(required = true, multiple = false)]
-pub struct Flag {
     /// Print the number of bytes in the file
     #[arg(short = 'c', long)]
     pub bytes: bool,
@@ -29,5 +18,8 @@ pub struct Flag {
     /// Print the number of chars in the file
     #[arg(short = 'm', long)]
     pub chars: bool,
+
+    /// The file to analyze
+    pub file: Option<String>,
 }
 
