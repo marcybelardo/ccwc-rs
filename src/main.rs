@@ -18,11 +18,19 @@ fn main() -> Result<()> {
         filename = name.to_string();
         let file = File::open(name)?;
         let mut file_reader = BufReader::with_capacity(BUF_SIZE, file);
-        counter.count_complicated(&mut file_reader)?;
+        if cli.bytes {
+            counter.count_bytes(&mut file_reader)?;
+        } else {
+            counter.count_complicated(&mut file_reader)?;
+        }
     } else {
         let stdin = io::stdin();
         let mut handle = stdin.lock();
-        counter.count_complicated(&mut handle)?;
+        if cli.bytes {
+            counter.count_bytes(&mut handle)?;
+        } else {
+            counter.count_complicated(&mut handle)?;
+        }
     }
 
     counter.print_results(&filename, cli.chars, cli.bytes, cli.lines, cli.words);

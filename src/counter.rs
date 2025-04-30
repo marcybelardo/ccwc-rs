@@ -1,7 +1,7 @@
 use crate::BUF_SIZE;
 
-use std::io::BufRead;
 use anyhow::Result;
+use std::io::BufRead;
 
 pub struct Counter {
     bytes: usize,
@@ -44,9 +44,11 @@ impl Counter {
                         // Besides, I'd have to do some extra saucy stuff
                         // for UTF-8 chars bigger than a byte
                         // self.chars += 1;
-                        
+
                         // Count lines by looking for newline chars
-                        if *byte == b'\n' { self.lines += 1 };
+                        if *byte == b'\n' {
+                            self.lines += 1
+                        };
 
                         // Count words by counting word starts, i.e.
                         // `is_word` is first set to false, and is only
@@ -56,21 +58,21 @@ impl Counter {
                         // is incremented.
                         match (byte.is_ascii_whitespace(), is_word) {
                             // Ignore whitespace at the start of a line
-                            (true, false) => {},
+                            (true, false) => {}
                             // Nothing to do while going through a word's chars
-                            (false, true) => {},
+                            (false, true) => {}
                             // We've found a non-whitespace char
                             (false, false) => is_word = true,
                             // Found a whitespace char after a string of non-ws
                             (true, true) => {
                                 self.words += 1;
                                 is_word = false;
-                            },
+                            }
                         }
                     });
 
                     continue;
-                },
+                }
                 Err(e) => return Err(e.into()),
             }
         }
@@ -78,7 +80,31 @@ impl Counter {
         Ok(())
     }
 
-    pub fn print_results(&self, filename: &str, chars: bool, bytes: bool, lines: bool, words: bool) {
+    pub fn count_bytes<R: BufRead>(&mut self, reader: &mut R) -> Result<()> {
+        loop {
+            let mut contents: [u8; BUF_SIZE] = [0u8; BUF_SIZE];
+
+            match reader.read(&mut contents) {
+                Ok(len) if len == 0 => break,
+                Ok(len) => {
+                    self.bytes += len;
+                    continue;
+                }
+                Err(e) => return Err(e.into()),
+            }
+        }
+
+        Ok(())
+    }
+
+    pub fn print_results(
+        &self,
+        filename: &str,
+        chars: bool,
+        bytes: bool,
+        lines: bool,
+        words: bool,
+    ) {
         print!(" ");
 
         // Printing chars over bytes is wc's behavior
